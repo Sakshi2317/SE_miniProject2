@@ -1,101 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Register</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="./js/jquery.min.js"></script>
-    <script src="./js/popper.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-    <link href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/index.css">
-    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/animate.min.css">
-    
-</head>
-<body>
-    <br>
-    <br>
-    <br>
-    <div class="container p-4" style="background-image: linear-gradient(180deg, #009efd 0%, #720c94 100%);;margin-top:-25px; width:50%" >
-    
-     <div class="row">
-         <div class="col-md-3"></div>
-         <div class="col-md-6 bg-white p-4 rounded shadow-sm">
-         <h3 style="font-family: 'Righteous', cursive;">REGISTER</h3>
-         <hr>
-            <form class="signup-form mb-3">
-                <div class="form-group mb-3">
-                    <label for="firstname">Firstname<sup class="text-danger">*</sup></label>
-                    <input type="text" name="firstname" placeholder="Firstname" class="form-control bg-light" id="firstname"></input>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="lastname">Lastname<sup class="text-danger">*</sup></label>
-                    <input type="text" name="lastname" placeholder="Lastname" class="form-control bg-light" id="lastname"></input>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email">Email<sup class="text-danger">*</sup></label>
-                    <input type="email" name="email" placeholder="email@gmail.com" class="form-control bg-light" id="email"></input>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="password">Password<sup class="text-danger">*</sup></label>
-                    <input type="password" name="password" placeholder="*******" class="form-control bg-light" id="password"></input>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="phone">Phone<sup class="text-danger">*</sup></label>
-                    <input type="number" name="phone" placeholder="+91.........." class="form-control bg-light" id="phone"></input>
-                </div>
-                <button class="btn btn-primary py-2 register-btn mb-3" type="submit">Register now</button>
-            </form>
-            <div class="alert alert-success d-none success-msg" role="alert">
-             Signup success,please login...
-             </div>
+<?php
+require("../database/database.php");
+$firstname = $_POST['firstname'];
+$lastname = $_POST['lastname'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$phone = $_POST['phone'];
+$check_table = "SELECT * FROM register";
+$response = $db->query($check_table);
+if($response){
+    $insert_data = "INSERT INTO register(firstname,lastname,email,password,phone)
+    VALUES('$firstname','$lastname','$email','$password','$phone')";
+        $response = $db->query($insert_data);
+        if($response){
+            echo"success";
+        }
+        else{
+            echo"Failed to data store";
+        }
+}
+else{
+    $create_table = "CREATE TABLE register(
+        id INT(10) NOT NULL AUTO_INCREMENT,
+        firstname VARCHAR(50),
+        lastname VARCHAR(50),
+        email VARCHAR(100),
+        password VARCHAR(20),
+        phone VARCHAR(10),
+        PRIMARY KEY(id)
+    )";
 
-             <p>If you have a account please login <a href="./signin.php" >Login now</a></p>
-         </div>
-         <div class="col-md-3"></div>
-     </div>
-    </div>
+    $response = $db->query($create_table);
+    if($response){
+      $insert_data = "INSERT INTO register(firstname,lastname,email,password,phone)
+      VALUES('$firstname','$lastname','$email','$password','$phone')";
+          $response = $db->query($insert_data);
+          if($response){
+              echo"success";
+          }
+          else{
+              echo"Failed to data store";
+          }
+    }
+    else{
+        echo"Failed to create table";
+    }
+}
 
-    </div>
 
-   <?php 
-   include_once("./design/footer.php");
-   ?>
-   <script>
-   $(document).ready(function(){
-      $(".signup-form").submit(function(e){
-        e.preventDefault();
-        $.ajax({
-            type : "POST",
-            url : "./php/register.php",
-            data : new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            success : function(response){
-              if(response.trim()=="success")
-              {
-                  $(".signup-form").fadeOut(2000,function(){
-                      $(".success-msg").removeClass('d-none');
-                  });     
 
-              }
-              else{
-                  alert(response);
-              }
-            }
 
-        });
-      });
-   });
-   
-   
-   </script>
-<script src="./js/index.js"></script>
-</body>
-</html>
+
+
+
+
+
+
+
+
+
+?>
